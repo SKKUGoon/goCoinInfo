@@ -26,7 +26,7 @@ func reader(conn *websocket.Conn) {
 			log.Println(err)
 			return
 		}
-
+		// print incoming message
 		fmt.Println(string(p))
 
 		if err := conn.WriteMessage(messageType, p); err != nil {
@@ -37,6 +37,7 @@ func reader(conn *websocket.Conn) {
 }
 
 func wsEndpoint(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "WebSocket Endpoint")
 	upgrader.CheckOrigin = func(r *http.Request) bool {
 		// Keep if simple for now (Test)
 		// return true regardless of what host is trying to connect
