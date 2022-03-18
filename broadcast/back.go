@@ -1,14 +1,10 @@
-package main
+package broadcast
 
 import (
 	"fmt"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
-)
-
-import (
-	_ "github.com/gorilla/websocket"
 )
 
 var upgrader = websocket.Upgrader{
@@ -30,33 +26,42 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 	log.Println("Client Connected")
-	reader(ws)
+	jsonReader(ws)
 }
 
-func reader(conn *websocket.Conn) {
+func jsonReader(conn *websocket.Conn) {
 	for {
-		messageType, p, err := conn.ReadMessage()
+		// Define MessageRecv Structure
+		m := &MessageRecv{}
+
+		// Get MessageRecv
+		err := conn.ReadJSON(m)
 		if err != nil {
 			log.Println(err)
 			return
+		} else {
+			log.Println(m.Data)
 		}
 
-		fmt.Println(string(p))
+		// Send MessageRecv
 
-		if err := conn.WriteMessage(messageType, p); err != nil {
+		r := MessageResp{
+			SignalType: "conn_resp",
+			Data: DataResp{
+				Status: "normal",
+				Msg:    "connection_normal",
+			},
+		}
+		log.Println(r)
+		err = conn.WriteJSON(r)
+		if err != nil {
 			log.Println(err)
 			return
 		}
 	}
 }
 
-func setupRoutes() {
+func SetupRoutes() {
 	http.HandleFunc("/", homePage)
 	http.HandleFunc("/ws", wsEndpoint)
-}
-
-func main() {
-	fmt.Println("Hello World")
-	setupRoutes()
-	log.Fatal(http.ListenAndServe(":7890", nil))
 }
