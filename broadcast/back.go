@@ -44,7 +44,6 @@ func jsonReader(conn *websocket.Conn) {
 		}
 
 		// Send MessageRecv
-
 		r := MessageResp{
 			SignalType: "conn_resp",
 			Data: DataResp{

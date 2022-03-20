@@ -1,12 +1,13 @@
 package main
 
 import (
+	"broadcast"
 	"log"
 	"net/http"
 )
 
 func main() {
 	log.Println("Starting Trading Session")
-	SetupRoutes()
+	broadcast.SetupRoutes()
 	log.Fatal(http.ListenAndServe(":7890", nil))
 }
