@@ -26,10 +26,23 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 	log.Println("Client Connected")
-	jsonReader(ws)
+	reader(ws)
 }
 
-func jsonReader(conn *websocket.Conn) {
+func jsonRecv(conn *websocket.Conn) {
+	m := &MessageRecv{}
+
+	err := conn.ReadJSON(m)
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+func jsonResp() {
+
+}
+
+func reader(conn *websocket.Conn) {
 	for {
 		// Define MessageRecv Structure
 		m := &MessageRecv{}

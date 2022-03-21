@@ -1,7 +1,7 @@
 package main
 
 import (
-	"broadcast"
+	"goBinance/broadcast"
 	"log"
 	"net/http"
 )
