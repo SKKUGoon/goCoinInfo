@@ -12,8 +12,17 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
+var (
+	BackOfficeGroup = make(map[interface{}]bool)
+	MiddOfficeGroup = make(map[interface{}]bool)
+	FrntOfficeGroup = make(map[interface{}]bool)
+)
+
 func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Home Page")
+	_, err := fmt.Fprintf(w, "Home Page")
+	if err != nil {
+		return
+	}
 }
 
 func wsEndpoint(w http.ResponseWriter, r *http.Request) {
@@ -29,32 +38,10 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) {
 	reader(ws)
 }
 
-func jsonRecv(conn *websocket.Conn) {
-	m := &MessageRecv{}
-
-	err := conn.ReadJSON(m)
-	if err != nil {
-		log.Println(err)
-	}
-}
-
-func jsonResp() {
-
-}
-
 func reader(conn *websocket.Conn) {
 	for {
 		// Define MessageRecv Structure
-		m := &MessageRecv{}
-
-		// Get MessageRecv
-		err := conn.ReadJSON(m)
-		if err != nil {
-			log.Println(err)
-			return
-		} else {
-			log.Println(m.Data)
-		}
+		JsonRecv(conn)
 
 		// Send MessageRecv
 		r := MessageResp{
@@ -65,7 +52,7 @@ func reader(conn *websocket.Conn) {
 			},
 		}
 		log.Println(r)
-		err = conn.WriteJSON(r)
+		err := conn.WriteJSON(r)
 		if err != nil {
 			log.Println(err)
 			return
