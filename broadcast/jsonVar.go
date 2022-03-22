@@ -1,7 +1,8 @@
-package main
+package broadcast
 
 type DataRecv struct {
 	Msg string `json:"msg"`
+	Dep string `json:"dep"`
 }
 
 type DataResp struct {
