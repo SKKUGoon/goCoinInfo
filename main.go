@@ -10,4 +10,6 @@ func main() {
 	if err == nil {
 		fmt.Println(a)
 	}
+
+	crawler.CrawlBithumb()
 }

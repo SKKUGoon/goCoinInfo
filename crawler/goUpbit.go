@@ -43,7 +43,7 @@ func upbitNewAsset(content *upbitAPI) ([]string, error) {
 }
 
 func CrawlUpbit() ([]string, error) {
-	URL := "https://api-manager.upbit.com/api/v1/notices?page=1"
+	const URL = "https://api-manager.upbit.com/api/v1/notices?page=1"
 	cnt := new(upbitAPI)
 
 	resp, err := http.Get(URL)
