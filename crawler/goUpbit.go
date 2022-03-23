@@ -28,7 +28,9 @@ type upbitAPI struct {
 func upbitNewAsset(content *upbitAPI) {
 	//fmt.Println(content.Data.List)
 	for _, notice := range content.Data.List {
-		t := time.Date(2022, 1, 16, 17, 0, 0, 0, time.UTC)
+		// 10 secs before
+		t := time.Now()
+		t = t.Add(-10 * time.Second)
 		if notice.CreatedAt.After(t) {
 			als, err := IfAssetKor(notice)
 			if err == nil {
