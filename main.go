@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	//"goBinance/broadcast"
 	"goBinance/crawler"
 	"log"
@@ -10,6 +11,9 @@ import (
 func main() {
 	log.Println("Starting Trading Session:")
 	//broadcast.SetupRoutes()
-	crawler.CrawlUpbit()
+	a, err := crawler.CrawlUpbit()
+	if err == nil {
+		fmt.Println(a)
+	}
 	//log.Fatal(http.ListenAndServe(":7890", nil))
 }

@@ -2,7 +2,7 @@ package crawler
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 	"log"
 	"net/http"
 	"time"
@@ -25,22 +25,24 @@ type upbitAPI struct {
 	} `json:"data"`
 }
 
-func upbitNewAsset(content *upbitAPI) {
-	//fmt.Println(content.Data.List)
+func upbitNewAsset(content *upbitAPI) ([]string, error) {
+	// upbitAPI struct =>
+	// => goes through one by one
+	// => if recent notice -> find asset
 	for _, notice := range content.Data.List {
-		// 10 secs before
 		t := time.Now()
 		t = t.Add(-10 * time.Second)
 		if notice.CreatedAt.After(t) {
 			als, err := IfAssetKor(notice)
 			if err == nil {
-				fmt.Println(als)
+				return als, nil
 			}
 		}
 	}
+	return nil, errors.New("no signal")
 }
 
-func CrawlUpbit() {
+func CrawlUpbit() ([]string, error) {
 	URL := "https://api-manager.upbit.com/api/v1/notices?page=1"
 	cnt := new(upbitAPI)
 
@@ -53,7 +55,15 @@ func CrawlUpbit() {
 	err = json.NewDecoder(resp.Body).Decode(cnt)
 	if err != nil {
 		log.Println("[Crawler][Upbit] >>> JSON Decode Unsuccessful")
+		return nil, err
 	} else {
-		upbitNewAsset(cnt)
+		result, err := upbitNewAsset(cnt)
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		} else {
+			log.Println("[Crawler][Upbit] >>>", result, "found")
+			return result, nil
+		}
 	}
 }
