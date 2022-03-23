@@ -1,13 +1,15 @@
 package main
 
 import (
-	"goBinance/broadcast"
+	//"goBinance/broadcast"
+	"goBinance/crawler"
 	"log"
-	"net/http"
+	//"net/http"
 )
 
 func main() {
 	log.Println("Starting Trading Session:")
-	broadcast.SetupRoutes()
-	log.Fatal(http.ListenAndServe(":7890", nil))
+	//broadcast.SetupRoutes()
+	crawler.CrawlUpbit()
+	//log.Fatal(http.ListenAndServe(":7890", nil))
 }
