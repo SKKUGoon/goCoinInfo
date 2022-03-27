@@ -1,16 +1,15 @@
 package crawler
 
 import (
-	"errors"
 	"fmt"
-	"golang.org/x/net/html"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strings"
 )
 
 func urlBithumb(cat, pg string) string {
+	// make bitthumb crawling url.
+	// include body, and headers for access.
 	const URL = "https://cafe.bithumb.com/view/boards/43"
 
 	resp, err := http.NewRequest("GET", URL, nil)
@@ -29,34 +28,19 @@ func urlBithumb(cat, pg string) string {
 	return resp.URL.String()
 }
 
-func parseTable(text string, wanted []string) ([]string, error) {
-	content := []string{}
-
-	tkn := html.NewTokenizer(strings.NewReader(text))
-	for {
-		tt := tkn.Next()
-		switch {
-		case tt == html.ErrorToken:
-			return nil, errors.New("end of parse")
-		case tt == html.StartTagToken:
-			t := tkn.Token()
-			for _, name := range wanted {
-				if t.Data == name {
-					text := string(tkn.Text())
-					t := strings.TrimSpace(text)
-					content = append(content, t)
-				}
-			}
-		}
-		fmt.Println(content)
+func setHashMap(ls []string) map[string]bool {
+	result := make(map[string]bool)
+	for _, v := range ls {
+		result[v] = true
 	}
-
+	return result
 }
+
 func CrawlBithumb() {
 	var URL = urlBithumb("9", "0")
 	resp, err := http.Get(URL)
 	if err != nil {
-		log.Println("[Crawler][Bithumb] >>> Unsuccessful")
+		log.Println("[Crawler][Bithumb] >>> Unsuccessful request")
 	}
 
 	defer resp.Body.Close()
@@ -66,11 +50,10 @@ func CrawlBithumb() {
 		return
 	} else {
 		d := string(data)
-		w := []string{"td", "table"}
-		p, err := parseTable(d, w)
+		w := []string{"a", "td"}
+		p, err := AssetBithumb(d, setHashMap(w))
 		if err == nil {
 			fmt.Println(p)
 		}
 	}
-
 }
