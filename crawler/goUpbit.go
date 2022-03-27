@@ -31,9 +31,10 @@ func upbitNewAsset(content *upbitAPI) ([]string, error) {
 	// => if recent notice -> find asset
 	for _, notice := range content.Data.List {
 		t := time.Now()
+		// created recently - 10 seconds
 		t = t.Add(-10 * time.Second)
 		if notice.CreatedAt.After(t) {
-			als, err := IfAssetKor(notice)
+			als, err := AssetUpbit(notice)
 			if err == nil {
 				return als, nil
 			}
