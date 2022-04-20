@@ -8,14 +8,6 @@ import (
 	"time"
 )
 
-const (
-	MARKETADDUPBIT    = "마켓 디지털 자산 추가"
-	MARKETADDBITHUMB0 = "마켓 추가"
-	MARKETADDBITHUMB1 = "마켓 상장"
-	MARKETKRW         = "KRW"
-	MARKETBTC         = "BTC"
-)
-
 func clean(s []byte) (string, error) {
 	// ticker only contains alphabet character
 	// returns (alphabet value, error)
@@ -52,7 +44,7 @@ func ifAssetKor(text string) ([]string, error) {
 	}
 }
 
-func AssetUpbit(title upbitTitle) ([]string, error) {
+func AssetUpbit(title UpbitTitle) ([]string, error) {
 	// find asset ticker inside upbit api signals
 	t := title.Title
 	if strings.Contains(t, MARKETADDUPBIT) {
