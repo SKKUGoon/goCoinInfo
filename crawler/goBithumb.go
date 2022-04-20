@@ -1,7 +1,6 @@
 package crawler
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -36,7 +35,7 @@ func setHashMap(ls []string) map[string]bool {
 	return result
 }
 
-func CrawlBithumb() {
+func CrawlBithumb() ([]string, error) {
 	var URL = urlBithumb("9", "0")
 	resp, err := http.Get(URL)
 	if err != nil {
@@ -47,13 +46,15 @@ func CrawlBithumb() {
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println("fail to read html")
-		return
+		return nil, err
 	} else {
 		d := string(data)
 		w := []string{"a", "td"}
 		p, err := AssetBithumb(d, setHashMap(w))
-		if err == nil {
-			fmt.Println(p)
+		if err != nil {
+			return nil, err
+		} else {
+			return p, nil
 		}
 	}
 }

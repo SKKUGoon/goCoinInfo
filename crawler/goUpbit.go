@@ -25,7 +25,7 @@ type upbitAPI struct {
 	} `json:"data"`
 }
 
-func upbitNewAsset(content *upbitAPI) ([]string, error) {
+func upbitNewAsset(content *upbitAPI, testMode bool) ([]string, error) {
 	// upbitAPI struct =>
 	// => goes through one by one
 	// => if recent notice -> find asset
@@ -33,7 +33,7 @@ func upbitNewAsset(content *upbitAPI) ([]string, error) {
 		t := time.Now()
 		// created recently - 10 seconds
 		t = t.Add(-10 * time.Second)
-		if notice.CreatedAt.After(t) {
+		if testMode || notice.CreatedAt.After(t) {
 			als, err := AssetUpbit(notice)
 			if err == nil {
 				return als, nil
@@ -43,27 +43,33 @@ func upbitNewAsset(content *upbitAPI) ([]string, error) {
 	return nil, errors.New("no signal")
 }
 
-func CrawlUpbit() ([]string, error) {
-	const URL = "https://api-manager.upbit.com/api/v1/notices?page=1"
+func CrawlUpbit(testMode bool) ([]string, error) {
+	var target string
 	cnt := new(upbitAPI)
 
-	resp, err := http.Get(URL)
+	if testMode == true {
+		target = UpbitURLTEST
+	} else {
+		target = UpbitURL
+	}
+
+	resp, err := http.Get(target)
 	if err != nil {
-		log.Println("[Crawler][Upbit] >>> Unsuccessful")
+		log.Println(UpbitReqErr)
 	}
 
 	defer resp.Body.Close()
 	err = json.NewDecoder(resp.Body).Decode(cnt)
 	if err != nil {
-		log.Println("[Crawler][Upbit] >>> JSON Decode Unsuccessful")
+		log.Println(UpbitJsonErr)
 		return nil, err
 	} else {
-		result, err := upbitNewAsset(cnt)
+		result, err := upbitNewAsset(cnt, testMode)
 		if err != nil {
 			log.Println(err)
 			return nil, err
 		} else {
-			log.Println("[Crawler][Upbit] >>>", result, "found")
+			log.Println(UpbitAssetFound)
 			return result, nil
 		}
 	}
