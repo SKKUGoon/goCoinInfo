@@ -6,22 +6,27 @@ import (
 	"net/http"
 )
 
-func urlBithumb(cat, pg string) string {
+func urlBithumb(category, pageNo string, testMode bool) string {
 	// make bitthumb crawling url.
 	// include body, and headers for access.
-	const URL = "https://cafe.bithumb.com/view/boards/43"
+	var target string
+	if testMode == true {
+		target = BithumbURLTEST
+	} else {
+		target = BithumbURL
+	}
 
-	resp, err := http.NewRequest("GET", URL, nil)
+	resp, err := http.NewRequest("GET", target, nil)
 	if err != nil {
-		log.Println("[Crawler][Bithumb] >>> URL creation unsuccessful")
+		log.Println(BithumbURLErr)
 	}
 
 	resp.Header = http.Header{
 		"User-Agent": []string{"Mozilla/5.0 (Windows NT 10.0; Win64; x64)"},
 	}
 	qry := resp.URL.Query()
-	qry.Add("noticeCategory", cat)
-	qry.Add("pageNumber", pg)
+	qry.Add("noticeCategory", category)
+	qry.Add("pageNumber", pageNo)
 
 	resp.URL.RawQuery = qry.Encode()
 	return resp.URL.String()
@@ -35,22 +40,23 @@ func setHashMap(ls []string) map[string]bool {
 	return result
 }
 
-func CrawlBithumb() ([]string, error) {
-	var URL = urlBithumb("9", "0")
+func CrawlBithumb(testMode bool) ([]string, error) {
+	var URL = urlBithumb("9", "0", testMode)
 	resp, err := http.Get(URL)
 	if err != nil {
-		log.Println("[Crawler][Bithumb] >>> Unsuccessful request")
+		log.Println(BithumbReqErr)
 	}
 
 	defer resp.Body.Close()
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println("fail to read html")
+		log.Println(BithumbParseErr)
 		return nil, err
 	} else {
 		d := string(data)
 		w := []string{"a", "td"}
 		p, err := AssetBithumb(d, setHashMap(w))
+
 		if err != nil {
 			return nil, err
 		} else {
