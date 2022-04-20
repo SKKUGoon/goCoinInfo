@@ -8,27 +8,13 @@ import (
 	"time"
 )
 
-type upbitTitle struct {
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Id        int       `json:"id"`
-	Title     string    `json:"title"`
-	ViewCount int       `json:"view_count"`
-}
-
-type upbitAPI struct {
-	Success bool `json:"success"`
-	Data    struct {
-		TotalCount int          `json:"total_count"`
-		TotalPages int          `json:"total_pages"`
-		List       []upbitTitle `json:"list"`
-	} `json:"data"`
-}
-
-func upbitNewAsset(content *upbitAPI, testMode bool) ([]string, error) {
-	// upbitAPI struct =>
-	// => goes through one by one
-	// => if recent notice -> find asset
+func upbitNewAsset(content *UpbitAPI, testMode bool) ([]string, error) {
+	/*
+		/ UpbitAPI struct
+		/ goes through one by one
+		/ if recent notice
+		/ find asset
+	*/
 	for _, notice := range content.Data.List {
 		t := time.Now()
 		// created recently - 10 seconds
@@ -45,7 +31,7 @@ func upbitNewAsset(content *upbitAPI, testMode bool) ([]string, error) {
 
 func CrawlUpbit(testMode bool) ([]string, error) {
 	var target string
-	cnt := new(upbitAPI)
+	cnt := new(UpbitAPI)
 
 	if testMode == true {
 		target = UpbitURLTEST
