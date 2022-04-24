@@ -3,10 +3,16 @@ package crawler
 // Upbit Configuration
 const (
 	UpbitURL        = "https://api-manager.upbit.com/api/v1/notices?page=1"
-	UpbitURLTEST    = "https://api-manager.upbit.com/api/v1/notices?page=2"
+	UpbitURLTEST    = "https://api-manager.upbit.com/api/v1/notices?page=3"
 	UpbitReqErr     = "[Crawler][Upbit] >>> Unsuccessful"
 	UpbitJsonErr    = "[Crawler][Upbit] >>> JSON Decode Unsuccessful"
 	UpbitAssetFound = "[Crawler][Upbit] >>> Asset found"
+
+	UpbitOrderHF   = "upbit market add event high freq"
+	UpbitOrderHFId = 001
+	UpbitOrderLF   = "upbit market add event low freq"
+	UpbitOrderLFId = 002
+	UpbitAssetType = "spot"
 )
 
 // Bithumb Configuration
