@@ -2,14 +2,6 @@ package crawler
 
 import "time"
 
-type UpbitTitle struct {
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Id        int       `json:"id"`
-	Title     string    `json:"title"`
-	ViewCount int       `json:"view_count"`
-}
-
 type UpbitAPI struct {
 	Success bool `json:"success"`
 	Data    struct {
@@ -17,4 +9,12 @@ type UpbitAPI struct {
 		TotalPages int          `json:"total_pages"`
 		List       []UpbitTitle `json:"list"`
 	} `json:"data"`
+}
+
+type UpbitTitle struct {
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Id        int       `json:"id"`
+	Title     string    `json:"title"`
+	ViewCount int       `json:"view_count"`
 }
