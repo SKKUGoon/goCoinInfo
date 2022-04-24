@@ -3,6 +3,7 @@ package crawler
 import (
 	"encoding/json"
 	"errors"
+	"goBinance/orderbook"
 	"log"
 	"net/http"
 	"time"
@@ -33,19 +34,24 @@ func CrawlUpbit(testMode bool) ([]string, error) {
 	var target string
 	cnt := new(UpbitAPI)
 
+	// Test Mode
 	if testMode == true {
 		target = UpbitURLTEST
 	} else {
 		target = UpbitURL
 	}
 
+	// HTTP Request
 	resp, err := http.Get(target)
 	if err != nil {
 		log.Println(UpbitReqErr)
 	}
 
+	// Process Request to Struct Container(cnt)
 	defer resp.Body.Close()
 	err = json.NewDecoder(resp.Body).Decode(cnt)
+
+	// Process Container Data(cnt)
 	if err != nil {
 		log.Println(UpbitJsonErr)
 		return nil, err
@@ -59,4 +65,38 @@ func CrawlUpbit(testMode bool) ([]string, error) {
 			return result, nil
 		}
 	}
+}
+
+func OrderUpbit(asset string) (orderbook.OrderContent, orderbook.OrderContent) {
+	// fill in the orderContent
+	orderHfreq := orderbook.OrderContent{
+		A:  asset,
+		N:  UpbitOrderHF,
+		I:  UpbitOrderHFId,
+		T:  time.Now(),
+		ET: time.Now(),
+		TY: UpbitAssetType,
+		B:  "binance",
+		BC: 01,
+		OD: orderbook.OrderDetail{
+			P: "market",
+			D: 10 * time.Second,
+		},
+	}
+
+	orderLfreq := orderbook.OrderContent{
+		A:  asset,
+		N:  UpbitOrderLF,
+		I:  UpbitOrderLFId,
+		T:  time.Now(),
+		TY: UpbitAssetType,
+		B:  "binance",
+		BC: 01,
+		OD: orderbook.OrderDetail{
+			P: "limit",
+			D: 60 * time.Minute,
+		},
+	}
+
+	return orderHfreq, orderLfreq
 }
