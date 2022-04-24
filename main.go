@@ -3,12 +3,21 @@ package main
 import (
 	"fmt"
 	"goBinance/crawler"
-	"log"
 	"time"
 )
 
-func ccrUpbit(signal chan []string) {
+func syncUpbit() {
+	// signal chan []string
+	for {
+		a, err := crawler.CrawlUpbit(true)
+		if err == nil {
+			for _, orderSheet := range a {
+				fmt.Println(crawler.OrderUpbit(orderSheet))
+			}
+		}
 
+		time.Sleep(2 * time.Second)
+	}
 }
 
 func allCrawl(coinChannel chan []string) {
@@ -17,13 +26,9 @@ func allCrawl(coinChannel chan []string) {
 }
 
 func main() {
-	for {
-		a, err := crawler.CrawlUpbit(true)
-		if err == nil {
-			log.Println("asset", a)
-		}
-		time.Sleep(time.Second * 2)
+	//syncUpbit()
+	_, err := crawler.CrawlBithumb(true)
+	if err != nil {
+		fmt.Println(err)
 	}
-
-	//crawler.CrawlBithumb()
 }
