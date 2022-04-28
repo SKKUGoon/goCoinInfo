@@ -4,11 +4,14 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 )
 
 func urlBithumb(category, pageNo string, testMode bool) string {
-	// make bitthumb crawling url.
-	// include body, and headers for access.
+	/*
+		/ make Bitthumb crawling url.
+		/ include body, and headers for access.
+	*/
 	var target string
 	if testMode == true {
 		target = BithumbURLTEST
@@ -16,11 +19,13 @@ func urlBithumb(category, pageNo string, testMode bool) string {
 		target = BithumbURL
 	}
 
+	// Create Request URL
 	resp, err := http.NewRequest("GET", target, nil)
 	if err != nil {
 		log.Println(BithumbURLErr)
 	}
 
+	// Add Header and Body(Param)
 	resp.Header = http.Header{
 		"User-Agent": []string{"Mozilla/5.0 (Windows NT 10.0; Win64; x64)"},
 	}
@@ -40,7 +45,7 @@ func setHashMap(ls []string) map[string]bool {
 	return result
 }
 
-func CrawlBithumb(testMode bool) ([]string, error) {
+func CrawlBithumb(testMode bool) ([]time.Time, error) {
 	var URL = urlBithumb("9", "0", testMode)
 	resp, err := http.Get(URL)
 	if err != nil {
