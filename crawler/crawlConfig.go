@@ -18,7 +18,7 @@ const (
 // Bithumb Configuration
 const (
 	BithumbURL      = "https://cafe.bithumb.com/view/boards/43"
-	BithumbURLTEST  = ""
+	BithumbURLTEST  = "https://cafe.bithumb.com/view/boards/43"
 	BithumbURLErr   = "[Crawler][Bithumb] >>> URL creation unsuccessful"
 	BithumbReqErr   = "[Crawler][Bithumb] >>> Unsuccessful request"
 	BithumbParseErr = "[Crawler][Bithumb] >>> Fail to read HTML"
@@ -29,6 +29,8 @@ const (
 	MARKETADDUPBIT    = "마켓 디지털 자산 추가"
 	MARKETADDBITHUMB0 = "마켓 추가"
 	MARKETADDBITHUMB1 = "마켓 상장"
+	MARKETADDBITHUMB2 = "원화 마켓 추가"
+	MARKETADDBITHUMB3 = "BTC 마켓 추가"
 	MARKETKRW         = "KRW"
 	MARKETBTC         = "BTC"
 )
