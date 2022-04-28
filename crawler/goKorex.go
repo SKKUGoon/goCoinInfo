@@ -8,9 +8,87 @@ import (
 	"time"
 )
 
+// AssetUpbit PUBLIC
+func AssetUpbit(title UpbitTitle) ([]string, error) {
+	// find asset ticker inside upbit api signals
+	t := title.Title
+	if strings.Contains(t, MARKETADDUPBIT) {
+		data, err := ifAssetKor(t)
+		if err != nil {
+			return nil, errors.New("no asset found")
+		} else {
+			return data, nil
+		}
+	} else {
+		return nil, errors.New("not asset statement")
+	}
+}
+
+// AssetBithumb PUBLIC
+func AssetBithumb(text string, wanted map[string]bool) ([]BithumbTitle, error) {
+	/*
+		/ bithumb does not provide news api
+		/ parse the raw html files.
+		/ crawl the TextToken that comes after <a> StartToken: asset name
+		/ crawl the TextToken that comes after <td> StartToken: date
+	*/
+	var bithumbContainer []BithumbTitle
+	var assetParse = false
+	var tmpContainer = BithumbTitle{}
+
+	tkn := html.NewTokenizer(strings.NewReader(text))
+	for {
+		tt := tkn.Next()
+
+		switch {
+		// End of Parsing
+		case tt == html.ErrorToken:
+			return bithumbContainer, nil
+
+		// ex) <a> </a> <= <a> is a StartTagToken
+		case tt == html.StartTagToken:
+			tn := tkn.Token()
+
+			switch {
+			// process datetime
+			case wanted[tn.Data] == true && tn.Data == "td":
+				tt, tn = tkn.Next(), tkn.Token()
+
+				td, err := extractDate(tt, tn)
+				if err == nil {
+					if assetParse == true {
+						// end parsing
+						assetParse = false
+						tmpContainer.CreatedAt = td
+
+						// add parsed temp container {} to main container {}
+						bithumbContainer = append(bithumbContainer, tmpContainer)
+					}
+				}
+
+			// process asset content
+			case wanted[tn.Data] == true && tn.Data == "a":
+				tt, tn = tkn.Next(), tkn.Token()
+
+				asset, err := extractAsset(tt, tn)
+				if err == nil {
+					// start parsing
+					assetParse = true
+					tmpContainer.Asset = asset
+				}
+
+			default:
+				continue
+			}
+		}
+	}
+}
+
 func clean(s []byte) (string, error) {
-	// ticker only contains alphabet character
-	// returns (alphabet value, error)
+	/*
+		/ ticker only contains alphabet character
+		/ returns (alphabet value, error)
+	*/
 	j := 0
 	for _, b := range s {
 		sml := 'a' <= b && b <= 'z' // small letters
@@ -28,6 +106,9 @@ func clean(s []byte) (string, error) {
 }
 
 func ifAssetKor(text string) ([]string, error) {
+	/*
+		/ find out whether title contains asset
+	*/
 	var titleAsset []string
 
 	for _, c := range strings.Fields(text) {
@@ -43,21 +124,6 @@ func ifAssetKor(text string) ([]string, error) {
 		return titleAsset, errors.New("no asset found")
 	} else {
 		return titleAsset, nil
-	}
-}
-
-func AssetUpbit(title UpbitTitle) ([]string, error) {
-	// find asset ticker inside upbit api signals
-	t := title.Title
-	if strings.Contains(t, MARKETADDUPBIT) {
-		data, err := ifAssetKor(t)
-		if err != nil {
-			return nil, errors.New("no asset found")
-		} else {
-			return data, nil
-		}
-	} else {
-		return nil, errors.New("not asset statement")
 	}
 }
 
@@ -122,64 +188,5 @@ func extractAsset(tp html.TokenType, t html.Token) ([]string, error) {
 		}
 	} else {
 		return nil, errors.New("not text token")
-	}
-}
-
-func AssetBithumb(text string, wanted map[string]bool) ([]BithumbTitle, error) {
-	/*
-		/ bithumb does not provide news api
-		/ parse the raw html files.
-		/ crawl the TextToken that comes after <a> StartToken: asset name
-		/ crawl the TextToken that comes after <td> StartToken: date
-	*/
-	var bithumbContainer []BithumbTitle
-	var assetParse = false
-	var tmpContainer = BithumbTitle{}
-
-	tkn := html.NewTokenizer(strings.NewReader(text))
-	for {
-		tt := tkn.Next()
-
-		switch {
-		// End of Parsing
-		case tt == html.ErrorToken:
-			return bithumbContainer, nil
-
-		// ex) <a> </a> <= <a> is a StartTagToken
-		case tt == html.StartTagToken:
-			tn := tkn.Token()
-
-			switch {
-			// process datetime
-			case wanted[tn.Data] == true && tn.Data == "td":
-				tt, tn = tkn.Next(), tkn.Token()
-
-				td, err := extractDate(tt, tn)
-				if err == nil {
-					if assetParse == true {
-						// end parsing
-						assetParse = false
-						tmpContainer.CreatedAt = td
-
-						// add parsed temp container {} to main container {}
-						bithumbContainer = append(bithumbContainer, tmpContainer)
-					}
-				}
-
-			// process asset content
-			case wanted[tn.Data] == true && tn.Data == "a":
-				tt, tn = tkn.Next(), tkn.Token()
-
-				asset, err := extractAsset(tt, tn)
-				if err == nil {
-					// start parsing
-					assetParse = true
-					tmpContainer.Asset = asset
-				}
-
-			default:
-				continue
-			}
-		}
 	}
 }

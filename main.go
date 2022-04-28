@@ -23,17 +23,26 @@ func syncUpbit() {
 	}
 }
 
+func syncBithumb() {
+	// signal chan []string
+	for {
+		a, err := crawler.CrawlBithumb(true)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			fmt.Println(a)
+		}
+
+		time.Sleep(2 * time.Second)
+	}
+}
+
 func allCrawl(coinChannel chan []string) {
 	fmt.Println("All Crawl")
 
 }
 
 func main() {
-	//syncUpbit()
-	t, err := crawler.CrawlBithumb(true)
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println(t)
-	}
+	// syncUpbit()
+	// syncBithumb()
 }
