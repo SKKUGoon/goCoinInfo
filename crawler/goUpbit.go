@@ -31,6 +31,10 @@ func upbitNewAsset(content *UpbitAPI, testMode bool) ([]string, error) {
 }
 
 func CrawlUpbit(testMode bool) ([]string, error) {
+	/*
+		/ HTTP Request for Upbit URL.
+		/ returns the list of strings
+	*/
 	var target string
 	cnt := new(UpbitAPI)
 
@@ -68,7 +72,9 @@ func CrawlUpbit(testMode bool) ([]string, error) {
 }
 
 func OrderUpbit(asset string) (orderbook.OrderContent, orderbook.OrderContent) {
-	// fill in the orderContent
+	/*
+		/ fill in the orderContent
+	*/
 	orderHfreq := orderbook.OrderContent{
 		A:  asset,
 		N:  UpbitOrderHF,
