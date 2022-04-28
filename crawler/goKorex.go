@@ -2,7 +2,6 @@ package crawler
 
 import (
 	"errors"
-	"fmt"
 	"golang.org/x/net/html"
 	"log"
 	"strings"
@@ -126,15 +125,16 @@ func extractAsset(tp html.TokenType, t html.Token) ([]string, error) {
 	}
 }
 
-func AssetBithumb(text string, wanted map[string]bool) ([]time.Time, error) {
+func AssetBithumb(text string, wanted map[string]bool) ([]BithumbTitle, error) {
 	/*
 		/ bithumb does not provide news api
 		/ parse the raw html files.
 		/ crawl the TextToken that comes after <a> StartToken: asset name
 		/ crawl the TextToken that comes after <td> StartToken: date
 	*/
-	var timeContainer []time.Time
-	var assetContainer [][]string
+	var bithumbContainer []BithumbTitle
+	var assetParse = false
+	var tmpContainer = BithumbTitle{}
 
 	tkn := html.NewTokenizer(strings.NewReader(text))
 	for {
@@ -143,7 +143,7 @@ func AssetBithumb(text string, wanted map[string]bool) ([]time.Time, error) {
 		switch {
 		// End of Parsing
 		case tt == html.ErrorToken:
-			return timeContainer, nil
+			return bithumbContainer, nil
 
 		// ex) <a> </a> <= <a> is a StartTagToken
 		case tt == html.StartTagToken:
@@ -156,8 +156,14 @@ func AssetBithumb(text string, wanted map[string]bool) ([]time.Time, error) {
 
 				td, err := extractDate(tt, tn)
 				if err == nil {
-					fmt.Println("timeContainer", td)
-					timeContainer = append(timeContainer, td)
+					if assetParse == true {
+						// end parsing
+						assetParse = false
+						tmpContainer.CreatedAt = td
+
+						// add parsed temp container {} to main container {}
+						bithumbContainer = append(bithumbContainer, tmpContainer)
+					}
 				}
 
 			// process asset content
@@ -166,8 +172,9 @@ func AssetBithumb(text string, wanted map[string]bool) ([]time.Time, error) {
 
 				asset, err := extractAsset(tt, tn)
 				if err == nil {
-					fmt.Println("assetContainer", asset)
-					assetContainer = append(assetContainer, asset)
+					// start parsing
+					assetParse = true
+					tmpContainer.Asset = asset
 				}
 
 			default:

@@ -18,3 +18,8 @@ type UpbitTitle struct {
 	Title     string    `json:"title"`
 	ViewCount int       `json:"view_count"`
 }
+
+type BithumbTitle struct {
+	CreatedAt time.Time
+	Asset     []string
+}

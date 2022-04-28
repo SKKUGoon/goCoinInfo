@@ -4,7 +4,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"time"
 )
 
 func urlBithumb(category, pageNo string, testMode bool) string {
@@ -45,7 +44,7 @@ func setHashMap(ls []string) map[string]bool {
 	return result
 }
 
-func CrawlBithumb(testMode bool) ([]time.Time, error) {
+func CrawlBithumb(testMode bool) ([]BithumbTitle, error) {
 	var URL = urlBithumb("9", "0", testMode)
 	resp, err := http.Get(URL)
 	if err != nil {
