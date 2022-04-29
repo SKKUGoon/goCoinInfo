@@ -1,9 +1,11 @@
 package crawler
 
 import (
+	"goBinance/orderbook"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 )
 
 func urlBithumb(category, pageNo string, testMode bool) string {
@@ -67,4 +69,40 @@ func CrawlBithumb(testMode bool) ([]BithumbTitle, error) {
 			return p, nil
 		}
 	}
+}
+
+func OrderBithumb(asset string) (orderbook.OrderContent, orderbook.OrderContent) {
+	/*
+		/ fill in the orderContent
+	*/
+	orderHfreq := orderbook.OrderContent{
+		A:  asset,
+		N:  BithumbOrderHF,
+		I:  BithumbOrderHFId,
+		T:  time.Now(),
+		ET: time.Now(),
+		TY: BithumbAssetType,
+		B:  "binance",
+		BC: 01,
+		OD: orderbook.OrderDetail{
+			P: "market",
+			D: 10 * time.Second,
+		},
+	}
+
+	orderLfreq := orderbook.OrderContent{
+		A:  asset,
+		N:  BithumbOrderLF,
+		I:  BithumbOrderLFId,
+		T:  time.Now(),
+		TY: BithumbAssetType,
+		B:  "binance",
+		BC: 01,
+		OD: orderbook.OrderDetail{
+			P: "limit",
+			D: 60 * time.Minute,
+		},
+	}
+
+	return orderHfreq, orderLfreq
 }
