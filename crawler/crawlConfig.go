@@ -8,9 +8,9 @@ const (
 	UpbitJsonErr    = "[Crawler][Upbit] >>> JSON Decode Unsuccessful"
 	UpbitAssetFound = "[Crawler][Upbit] >>> Asset found"
 
-	UpbitOrderHF   = "upbit market add event high freq"
+	UpbitOrderHF   = "upbit_market_add_event_high_freq"
 	UpbitOrderHFId = 001
-	UpbitOrderLF   = "upbit market add event low freq"
+	UpbitOrderLF   = "upbit_market_add_event_low_freq"
 	UpbitOrderLFId = 002
 	UpbitAssetType = "spot"
 )
@@ -22,13 +22,17 @@ const (
 	BithumbURLErr   = "[Crawler][Bithumb] >>> URL creation unsuccessful"
 	BithumbReqErr   = "[Crawler][Bithumb] >>> Unsuccessful request"
 	BithumbParseErr = "[Crawler][Bithumb] >>> Fail to read HTML"
+
+	BithumbOrderHF   = "bithumb_market_add_event_high_freq"
+	BithumbOrderHFId = 011
+	BithumbOrderLF   = "bithumb_market_add_event_low_freq"
+	BithumbOrderLFId = 012
+	BithumbAssetType = "spot"
 )
 
 // Keywords
 const (
 	MARKETADDUPBIT    = "마켓 디지털 자산 추가"
-	MARKETADDBITHUMB0 = "마켓 추가"
-	MARKETADDBITHUMB1 = "마켓 상장"
 	MARKETADDBITHUMB2 = "원화 마켓 추가"
 	MARKETADDBITHUMB3 = "BTC 마켓 추가"
 	MARKETKRW         = "KRW"
