@@ -3,7 +3,7 @@ package crawler
 // Upbit Configuration
 const (
 	UpbitURL        = "https://api-manager.upbit.com/api/v1/notices?page=1"
-	UpbitURLTEST    = "https://api-manager.upbit.com/api/v1/notices?page=3"
+	UpbitURLTEST    = "https://api-manager.upbit.com/api/v1/notices?page=1"
 	UpbitReqErr     = "[Crawler][Upbit] >>> Unsuccessful"
 	UpbitJsonErr    = "[Crawler][Upbit] >>> JSON Decode Unsuccessful"
 	UpbitAssetFound = "[Crawler][Upbit] >>> Asset found"
