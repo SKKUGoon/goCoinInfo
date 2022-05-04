@@ -8,10 +8,12 @@ const (
 	UpbitJsonErr    = "[Crawler][Upbit] >>> JSON Decode Unsuccessful"
 	UpbitAssetFound = "[Crawler][Upbit] >>> Asset found"
 
-	UpbitOrderHF   = "upbit_market_add_event_high_freq"
+	UpbitOrderHF = "upbit_market_add_event_high_freq"
+	UpbitOrderLF = "upbit_market_add_event_low_freq"
+
 	UpbitOrderHFId = 001
-	UpbitOrderLF   = "upbit_market_add_event_low_freq"
 	UpbitOrderLFId = 002
+
 	UpbitAssetType = "spot"
 )
 
@@ -23,10 +25,12 @@ const (
 	BithumbReqErr   = "[Crawler][Bithumb] >>> Unsuccessful request"
 	BithumbParseErr = "[Crawler][Bithumb] >>> Fail to read HTML"
 
-	BithumbOrderHF   = "bithumb_market_add_event_high_freq"
+	BithumbOrderHF = "bithumb_market_add_event_high_freq"
+	BithumbOrderLF = "bithumb_market_add_event_low_freq"
+
 	BithumbOrderHFId = 011
-	BithumbOrderLF   = "bithumb_market_add_event_low_freq"
 	BithumbOrderLFId = 012
+
 	BithumbAssetType = "spot"
 )
 
