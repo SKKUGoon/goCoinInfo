@@ -27,7 +27,7 @@ func upbitNewAsset(content *UpbitAPI, testMode bool) ([]string, error) {
 			}
 		}
 	}
-	return nil, errors.New("no signal")
+	return nil, errors.New(UpbitAssetNotFind)
 }
 
 func CrawlUpbit(testMode bool) ([]string, error) {
@@ -62,7 +62,6 @@ func CrawlUpbit(testMode bool) ([]string, error) {
 	} else {
 		result, err := upbitNewAsset(cnt, testMode)
 		if err != nil {
-			log.Println(err)
 			return nil, err
 		} else {
 			return result, nil

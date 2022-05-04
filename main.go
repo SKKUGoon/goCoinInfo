@@ -13,7 +13,7 @@ import (
 func syncUpbit(lowFreqSig, highFreqSig chan orderbook.OrderContent) {
 	// lowFreqSig chan []string
 	for {
-		a, err := crawler.CrawlUpbit(true)
+		a, err := crawler.CrawlUpbit(false)
 		if err != nil {
 			log.Println(err)
 		} else {
@@ -98,7 +98,7 @@ func main() {
 	exit := make(chan string)
 
 	go syncUpbit(hfSigChan, lfSigChan)
-	go syncBithumb(lfSigChan, hfSigChan, 60*60*24*5)
+	go syncBithumb(lfSigChan, hfSigChan, 60*60*24*2)
 	go serverEx(exit)
 
 	for {
