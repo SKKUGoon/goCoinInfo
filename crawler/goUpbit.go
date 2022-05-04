@@ -65,7 +65,6 @@ func CrawlUpbit(testMode bool) ([]string, error) {
 			log.Println(err)
 			return nil, err
 		} else {
-			log.Println(UpbitAssetFound)
 			return result, nil
 		}
 	}
@@ -83,7 +82,7 @@ func OrderUpbit(asset string) (orderbook.OrderContent, orderbook.OrderContent) {
 		ET: time.Now(),
 		TY: UpbitAssetType,
 		B:  "binance",
-		BC: 01,
+		BC: 1,
 		OD: orderbook.OrderDetail{
 			P: "market",
 			D: 10 * time.Second,
@@ -97,7 +96,7 @@ func OrderUpbit(asset string) (orderbook.OrderContent, orderbook.OrderContent) {
 		T:  time.Now(),
 		TY: UpbitAssetType,
 		B:  "binance",
-		BC: 01,
+		BC: 1,
 		OD: orderbook.OrderDetail{
 			P: "limit",
 			D: 60 * time.Minute,
