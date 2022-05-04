@@ -2,11 +2,13 @@ package domestic
 
 // Upbit Configuration
 const (
-	UpbitURL        = "https://api-manager.upbit.com/api/v1/notices?page=1"
-	UpbitURLTEST    = "https://api-manager.upbit.com/api/v1/notices?page=1"
-	UpbitReqErr     = "[Crawler][Upbit] >>> Unsuccessful"
-	UpbitJsonErr    = "[Crawler][Upbit] >>> JSON Decode Unsuccessful"
-	UpbitAssetFound = "[Crawler][Upbit] >>> Asset found"
+	UpbitURL     = "https://api-manager.upbit.com/api/v1/notices?page=1"
+	UpbitURLTEST = "https://api-manager.upbit.com/api/v1/notices?page=1"
+
+	UpbitReqErr       = "[Crawler][Upbit] >>> Unsuccessful"
+	UpbitJsonErr      = "[Crawler][Upbit] >>> JSON Decode Unsuccessful"
+	UpbitAssetFound   = "[Crawler][Upbit] >>> Asset found"
+	UpbitAssetNotFind = "[Crawler][Upbit] >>> Asset Not Found"
 
 	UpbitOrderHF = "upbit_market_add_event_high_freq"
 	UpbitOrderLF = "upbit_market_add_event_low_freq"
@@ -19,8 +21,9 @@ const (
 
 // Bithumb Configuration
 const (
-	BithumbURL      = "https://cafe.bithumb.com/view/boards/43"
-	BithumbURLTEST  = "https://cafe.bithumb.com/view/boards/43"
+	BithumbURL     = "https://cafe.bithumb.com/view/boards/43"
+	BithumbURLTEST = "https://cafe.bithumb.com/view/boards/43"
+
 	BithumbURLErr   = "[Crawler][Bithumb] >>> URL creation unsuccessful"
 	BithumbReqErr   = "[Crawler][Bithumb] >>> Unsuccessful request"
 	BithumbParseErr = "[Crawler][Bithumb] >>> Fail to read HTML"

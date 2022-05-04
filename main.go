@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"goBinance/domestic"
+	"goBinance/crawler"
 	"goBinance/orderbook"
 	"log"
 	"math/rand"
@@ -13,12 +13,12 @@ import (
 func syncUpbit(lowFreqSig, highFreqSig chan orderbook.OrderContent) {
 	// lowFreqSig chan []string
 	for {
-		a, err := domestic.CrawlUpbit(true)
+		a, err := crawler.CrawlUpbit(true)
 		if err != nil {
 			log.Println(err)
 		} else {
 			for _, orderSheet := range a {
-				h, l := domestic.OrderUpbit(orderSheet)
+				h, l := crawler.OrderUpbit(orderSheet)
 				// Insert it in a channel - High Frequency
 				highFreqSig <- h
 				// Insert it in a channel - Low Frequency
@@ -30,7 +30,7 @@ func syncUpbit(lowFreqSig, highFreqSig chan orderbook.OrderContent) {
 	}
 }
 
-func recentBithumb(post domestic.BithumbTitle, secondSlack int) bool {
+func recentBithumb(post crawler.BithumbTitle, secondSlack int) bool {
 	t := time.Now().Add(time.Duration(secondSlack*-1) * time.Second)
 	if t.Before(post.CreatedAt) {
 		return true
@@ -39,11 +39,11 @@ func recentBithumb(post domestic.BithumbTitle, secondSlack int) bool {
 	}
 }
 
-func orderBithumb(post domestic.BithumbTitle) ([]orderbook.OrderContent, []orderbook.OrderContent) {
+func orderBithumb(post crawler.BithumbTitle) ([]orderbook.OrderContent, []orderbook.OrderContent) {
 	var highFreq []orderbook.OrderContent
 	var lowFreq []orderbook.OrderContent
 	for _, a := range post.Asset {
-		hf, lf := domestic.OrderBithumb(a)
+		hf, lf := crawler.OrderBithumb(a)
 		highFreq = append(highFreq, hf)
 		lowFreq = append(lowFreq, lf)
 	}
@@ -53,7 +53,7 @@ func orderBithumb(post domestic.BithumbTitle) ([]orderbook.OrderContent, []order
 func syncBithumb(lowFreqSig, highFreqSig chan orderbook.OrderContent, waitTime int) {
 	rand.Seed(time.Now().UnixNano())
 	for {
-		a, err := domestic.CrawlBithumb(false)
+		a, err := crawler.CrawlBithumb(false)
 		if err != nil {
 			fmt.Println(err)
 		} else {
