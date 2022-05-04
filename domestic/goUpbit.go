@@ -1,4 +1,4 @@
-package crawler
+package domestic
 
 import (
 	"encoding/json"

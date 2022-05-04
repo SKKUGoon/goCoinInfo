@@ -1,3 +1,3 @@
-package crawler
+package foreign
 
 //https://twitter.com/CoinbaseAssets
