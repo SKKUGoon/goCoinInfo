@@ -4,6 +4,7 @@ import (
 	"goBinance/orderbook"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"time"
 )
@@ -71,7 +72,7 @@ func CrawlBithumb(testMode bool) ([]BithumbTitle, error) {
 	}
 }
 
-func OrderBithumb(asset string) (orderbook.OrderContent, orderbook.OrderContent) {
+func OrderSheetBithumb(asset string) (orderbook.OrderContent, orderbook.OrderContent) {
 	/*
 		/ fill in the orderContent
 	*/
@@ -105,4 +106,32 @@ func OrderBithumb(asset string) (orderbook.OrderContent, orderbook.OrderContent)
 	}
 
 	return orderHfreq, orderLfreq
+}
+
+func RecentBithumb(post BithumbTitle, secondSlack int) bool {
+	t := time.Now().Add(time.Duration(secondSlack*-1) * time.Second)
+	if t.Before(post.CreatedAt) {
+		return true
+	} else {
+		return false
+	}
+}
+
+func OrderBithumb(post BithumbTitle) ([]orderbook.OrderContent, []orderbook.OrderContent) {
+	var highFreq []orderbook.OrderContent
+	var lowFreq []orderbook.OrderContent
+
+	for _, a := range post.Asset {
+		hf, lf := OrderSheetBithumb(a)
+		highFreq = append(highFreq, hf)
+		lowFreq = append(lowFreq, lf)
+	}
+	return highFreq, lowFreq
+}
+
+func RandomSleep() {
+	min, max := 60, 150
+	n := rand.Intn(max-min+1) + min
+	log.Printf("syncBithumb sleeping %d seconds\n", n)
+	time.Sleep(time.Duration(n) * time.Second)
 }
