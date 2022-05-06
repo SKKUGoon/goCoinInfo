@@ -69,7 +69,7 @@ func CrawlUpbit(testMode bool) ([]string, error) {
 	}
 }
 
-func OrderUpbit(asset string) (orderbook.OrderContent, orderbook.OrderContent) {
+func OrderSheetUpbit(asset string) (orderbook.OrderContent, orderbook.OrderContent) {
 	/*
 		/ fill in the orderContent
 	*/
