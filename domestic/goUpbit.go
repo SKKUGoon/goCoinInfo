@@ -59,13 +59,13 @@ func CrawlUpbit(testMode bool) ([]string, error) {
 	if err != nil {
 		log.Println(UpbitJsonErr)
 		return nil, err
+	}
+
+	result, err := upbitNewAsset(cnt, testMode)
+	if err != nil {
+		return nil, err
 	} else {
-		result, err := upbitNewAsset(cnt, testMode)
-		if err != nil {
-			return nil, err
-		} else {
-			return result, nil
-		}
+		return result, nil
 	}
 }
 

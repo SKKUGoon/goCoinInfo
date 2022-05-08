@@ -12,15 +12,15 @@ import (
 func AssetUpbit(title UpbitTitle) ([]string, error) {
 	// find asset ticker inside upbit api signals
 	t := title.Title
-	if strings.Contains(t, MARKETADDUPBIT) {
-		data, err := ifAssetKor(t)
-		if err != nil {
-			return nil, errors.New("no asset found")
-		} else {
-			return data, nil
-		}
-	} else {
+	if !(strings.Contains(t, MARKETADDUPBIT)) {
 		return nil, errors.New("not asset statement")
+	}
+
+	data, err := ifAssetKor(t)
+	if err != nil {
+		return nil, errors.New("no asset found")
+	} else {
+		return data, nil
 	}
 }
 
@@ -113,10 +113,11 @@ func ifAssetKor(text string) ([]string, error) {
 
 	for _, c := range strings.Fields(text) {
 		a, err := clean([]byte(c))
-		if err == nil {
-			if a != MARKETKRW && a != MARKETBTC {
-				titleAsset = append(titleAsset, a)
-			}
+		if err != nil {
+			continue
+		}
+		if a != MARKETKRW && a != MARKETBTC {
+			titleAsset = append(titleAsset, a)
 		}
 	}
 
