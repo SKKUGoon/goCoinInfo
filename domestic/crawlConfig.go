@@ -7,7 +7,6 @@ const (
 
 	UpbitReqErr       = "[Crawler][Upbit] >>> Unsuccessful"
 	UpbitJsonErr      = "[Crawler][Upbit] >>> JSON Decode Unsuccessful"
-	UpbitAssetFound   = "[Crawler][Upbit] >>> Asset found"
 	UpbitAssetNotFind = "[Crawler][Upbit] >>> Asset Not Found"
 
 	UpbitOrderHF = "upbit_market_add_event_high_freq"
