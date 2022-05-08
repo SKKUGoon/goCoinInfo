@@ -17,12 +17,16 @@ func syncUpbit(lowFreqSig, highFreqSig chan orderbook.OrderContent) {
 		if err != nil {
 			log.Println(err)
 		} else {
-			for _, orderSheet := range a {
-				h, l := domestic.OrderSheetUpbit(orderSheet)
+			for _, asset := range a {
+				orderStrat1 := orderbook.Strategy1(asset, 2, 1)
+				orderStrat2 := orderbook.Strategy2(asset, 2, 1)
+				orderStrat3 := orderbook.Strategy3(asset, 2, 1)
+
 				// Insert it in a channel - High Frequency
-				highFreqSig <- h
+				highFreqSig <- orderStrat1
 				// Insert it in a channel - Low Frequency
-				lowFreqSig <- l
+				lowFreqSig <- orderStrat2
+				lowFreqSig <- orderStrat3
 			}
 		}
 		time.Sleep(2 * time.Second)
@@ -35,18 +39,20 @@ func syncBithumb(lowFreqSig, highFreqSig chan orderbook.OrderContent, waitTime i
 		a, err := domestic.CrawlBithumb(false)
 		if err != nil {
 			fmt.Println(err)
-		} else {
-			for _, asset := range a {
-				if domestic.RecentBithumb(asset, waitTime) {
-					h, l := domestic.OrderBithumb(asset)
-					// Insert it in a channel - High Frequency
-					for _, orders := range h {
-						highFreqSig <- orders
-					}
-					// insert it in a channel - Low Frequency
-					for _, orders := range l {
-						lowFreqSig <- orders
-					}
+			continue
+		}
+
+		for _, asset := range a {
+			if domestic.RecentBithumb(asset, waitTime) {
+				h, l := domestic.OrderBithumb(asset)
+
+				// Insert it in a channel - High Frequency
+				for _, orders := range h {
+					highFreqSig <- orders
+				}
+				// insert it in a channel - Low Frequency
+				for _, orders := range l {
+					lowFreqSig <- orders
 				}
 			}
 		}

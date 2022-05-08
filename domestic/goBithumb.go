@@ -86,9 +86,9 @@ func OrderBithumb(post BithumbTitle) ([]orderbook.OrderContent, []orderbook.Orde
 	var lowFreq []orderbook.OrderContent
 
 	for _, a := range post.Asset {
-		orderStrat1 := orderbook.Strategy1(a)
-		orderStrat2 := orderbook.Strategy2(a)
-		orderStrat3 := orderbook.Strategy3(a)
+		orderStrat1 := orderbook.Strategy1(a, 3, 1)
+		orderStrat2 := orderbook.Strategy2(a, 3, 1)
+		orderStrat3 := orderbook.Strategy3(a, 3, 1)
 
 		highFreq = append(highFreq, orderStrat1)
 		lowFreq = append(lowFreq, orderStrat2)
