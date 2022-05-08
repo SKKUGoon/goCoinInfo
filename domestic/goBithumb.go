@@ -72,42 +72,6 @@ func CrawlBithumb(testMode bool) ([]BithumbTitle, error) {
 	}
 }
 
-func OrderSheetBithumb(asset string) (orderbook.OrderContent, orderbook.OrderContent) {
-	/*
-		/ fill in the orderContent
-	*/
-	orderHfreq := orderbook.OrderContent{
-		A:  asset,
-		N:  BithumbOrderHF,
-		I:  BithumbOrderHFId,
-		T:  time.Now(),
-		ET: time.Now(),
-		TY: BithumbAssetType,
-		B:  "binance",
-		BC: 01,
-		OD: orderbook.OrderDetail{
-			P: "market",
-			D: 10 * time.Second,
-		},
-	}
-
-	orderLfreq := orderbook.OrderContent{
-		A:  asset,
-		N:  BithumbOrderLF,
-		I:  BithumbOrderLFId,
-		T:  time.Now(),
-		TY: BithumbAssetType,
-		B:  "binance",
-		BC: 01,
-		OD: orderbook.OrderDetail{
-			P: "limit",
-			D: 60 * time.Minute,
-		},
-	}
-
-	return orderHfreq, orderLfreq
-}
-
 func RecentBithumb(post BithumbTitle, secondSlack int) bool {
 	t := time.Now().Add(time.Duration(secondSlack*-1) * time.Second)
 	if t.Before(post.CreatedAt) {
@@ -122,9 +86,13 @@ func OrderBithumb(post BithumbTitle) ([]orderbook.OrderContent, []orderbook.Orde
 	var lowFreq []orderbook.OrderContent
 
 	for _, a := range post.Asset {
-		hf, lf := OrderSheetBithumb(a)
-		highFreq = append(highFreq, hf)
-		lowFreq = append(lowFreq, lf)
+		orderStrat1 := orderbook.Strategy1(a)
+		orderStrat2 := orderbook.Strategy2(a)
+		orderStrat3 := orderbook.Strategy3(a)
+
+		highFreq = append(highFreq, orderStrat1)
+		lowFreq = append(lowFreq, orderStrat2)
+		lowFreq = append(lowFreq, orderStrat3)
 	}
 	return highFreq, lowFreq
 }

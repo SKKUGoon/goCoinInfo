@@ -3,7 +3,6 @@ package domestic
 import (
 	"encoding/json"
 	"errors"
-	"goBinance/orderbook"
 	"log"
 	"net/http"
 	"time"
@@ -67,40 +66,4 @@ func CrawlUpbit(testMode bool) ([]string, error) {
 	} else {
 		return result, nil
 	}
-}
-
-func OrderSheetUpbit(asset string) (orderbook.OrderContent, orderbook.OrderContent) {
-	/*
-		/ fill in the orderContent
-	*/
-	orderHfreq := orderbook.OrderContent{
-		A:  asset,
-		N:  UpbitOrderHF,
-		I:  UpbitOrderHFId,
-		T:  time.Now(),
-		ET: time.Now(),
-		TY: UpbitAssetType,
-		B:  "binance",
-		BC: 1,
-		OD: orderbook.OrderDetail{
-			P: "market",
-			D: 10 * time.Second,
-		},
-	}
-
-	orderLfreq := orderbook.OrderContent{
-		A:  asset,
-		N:  UpbitOrderLF,
-		I:  UpbitOrderLFId,
-		T:  time.Now(),
-		TY: UpbitAssetType,
-		B:  "binance",
-		BC: 1,
-		OD: orderbook.OrderDetail{
-			P: "limit",
-			D: 60 * time.Minute,
-		},
-	}
-
-	return orderHfreq, orderLfreq
 }
