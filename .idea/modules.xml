@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/goBinance.iml" filepath="$PROJECT_DIR$/.idea/goBinance.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/goCoinInfo.iml" filepath="$PROJECT_DIR$/.idea/goCoinInfo.iml" />
     </modules>
   </component>
 </project>

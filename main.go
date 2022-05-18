@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"goBinance/domestic"
-	"goBinance/orderbook"
+	"github.com/SKKUGoon/goCoinInfo/domestic"
+	"github.com/SKKUGoon/goCoinInfo/orderbook"
 	"log"
 	"math/rand"
 	"os"

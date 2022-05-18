@@ -1,7 +1,7 @@
 package domestic
 
 import (
-	"goBinance/orderbook"
+	"github.com/SKKUGoon/goCoinInfo/orderbook"
 	"io/ioutil"
 	"log"
 	"math/rand"
